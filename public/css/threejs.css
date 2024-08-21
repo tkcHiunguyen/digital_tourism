@@ -1,0 +1,110 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: serif;
+  color: rgb(6, 14, 131);
+}
+
+#canvas {
+  /* height: 100%;
+    width: 100%; */
+  margin: 0;
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+}
+
+#canvas:active {
+  cursor: all-scroll;
+}
+
+.web-gl.active {
+  cursor: url("/img/view/cursor/hover.cur"), auto;
+}
+
+.pointer {
+  background-color: rgba(255, 255, 255, 0);
+  cursor: url("/img/view/cursor/hover.cur"), auto;
+  position: absolute;
+  max-width: 250px;
+  max-height: 250px;
+  top: 0;
+  left: 0;
+  padding: 10px;
+  opacity: 0;
+  transform: translate3d(-50%, -100%, 0);
+  transition: opacity 0.3s, transform 0.3s;
+  text-align: justify;
+  font-family: "Dosis", sans-serif;
+  font-weight: bold;
+  display: none;
+}
+
+.pointer.is-active {
+  /* cursor: pointer; */
+  cursor: url(/img/view/cursor/hover.cur), auto;
+  max-width: 250px;
+  height: fit-content;
+  width: fit-content;
+  opacity: 1;
+  text-align: justify;
+  font-family: "Dosis", sans-serif;
+  transform: translate3d(-50%, 60px, 10px);
+  display: block;
+  color: #2a1b16;
+  border-style: dotted;
+  border-color: #3abd4b;
+  background-color: #f7ac16;
+  z-index: 0;
+}
+
+.pointer.is-active:hover {
+  display: block;
+  cursor: url("/img/view/cursor/hover.cur"), auto;
+}
+
+#menu {
+  position: fixed;
+  right: 40px;
+  top: 10px;
+  font-size: 40px;
+  color: white;
+  cursor: pointer;
+  z-index: 2;
+}
+
+#sidenav {
+  padding: 100px 0px;
+  position: fixed;
+  width: 250px;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(7px);
+  box-shadow: inset 5px 5px 5px grey;
+  transition: right 1s ease-in-out;
+  top: 0;
+  right: 0;
+}
+
+#sidenav ul li {
+  list-style: none;
+}
+
+#sidenav ul li a {
+  text-decoration: none;
+  color: aliceblue;
+  font-size: 30px;
+  margin: 10px 30;
+  display: block;
+  padding: 10px;
+}
+
+#sidenav ul li a:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transition: 0.4;
+}

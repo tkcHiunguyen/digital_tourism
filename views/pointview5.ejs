@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>demo 3D</title>
+    <link rel="stylesheet" href="/css/threejs.css">
+    <link rel="icon" type="image/png" href="/img/logo/logo.jpg">
+    <script type="importmap">
+        {
+            "imports":{
+                "three":"../build/three.module.js",
+                "three/examples/jsm/loaders/GLTFLoader":"/jsm/loaders/GLTFLoader.js",
+                "three/examples/jsm/controls/OrbitControls":"/jsm/controls/OrbitControls.js",
+                "three/examples/jsm/loaders/FBXLoader":"/jsm/loaders/FBXLoader.js",
+                "three/examples/jsm/loaders/OBJLoader":"/jsm/loaders/OBJLoader.js"
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <!-- <div id="info">
+        "W" translate | "E" rotate | "R" scale | "+/-" adjust size<br />
+        "Q" toggle world/local space | "Shift" snap to grid<br />
+        "X" toggle X | "Y" toggle Y | "Z" toggle Z | "Spacebar" toggle enabled<br />
+        "Esc" reset current transform<br />
+        "C" toggle camera | "V" random zoom
+    </div> -->
+    <div class="pointer"></div>
+    <canvas class="web-gl" id="canvas"></canvas>
+    <script type="module" src="/threejs/point5.js"></script>
+</body>
+
+</html>

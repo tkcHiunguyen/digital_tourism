@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VIEW</title>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> -->
+    <link rel="stylesheet" href="/css/threejs.css" />
+    <link rel="stylesheet" href="/css/view.css" />
+    <!-- ICON -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css"
+    />
+    <!-- FONT -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dosis&family=Geologica&family=Noto+Sans&family=Tektur:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <!-- LEAFLET MAP -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <!-- THREEJS -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "/build/three.module.js",
+          "three/examples/jsm/loaders/GLTFLoader": "/jsm/loaders/GLTFLoader.js",
+          "three/examples/jsm/controls/OrbitControls": "/jsm/controls/OrbitControls.js",
+          "three/examples/jsm/loaders/FBXLoader": "/jsm/loaders/FBXLoader.js",
+          "three/examples/jsm/loaders/OBJLoader": "/jsm/loaders/OBJLoader.js"
+        }
+      }
+    </script>
+    <script
+      src="https://kit.fontawesome.com/bf820f96f3.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+
+  <body>
+    <div id="content">
+      <div class="pointer"></div>
+      <canvas class="web-gl" id="canvas"></canvas>
+      <div class="menuBar"><i class="fa-regular fa-compass"></i></div>
+      <div class="listBar">
+        <ul>
+          <li>
+            <button id="btnVideo" class="btnVideo">
+              <i class="fa-solid fa-film"></i>&nbsp Video
+            </button>
+          </li>
+          <li>
+            <button id="btnInfo" class="btnInfo">
+              <i class="fa-solid fa-info"></i>&nbsp Thông tin
+            </button>
+          </li>
+          <li>
+            <button id="btnProduct" class="btnProduct">
+              <i class="fa-solid fa-cubes"></i>&nbsp Sản phẩm
+            </button>
+          </li>
+          <li>
+            <button id="btnHide" class="btnHide">
+              <i id="iconElement" class="fa-solid fa-eye-slash"></i>&nbsp Ẩn
+              Icon
+            </button>
+          </li>
+          <li>
+            <button id="btnMap" class="btnMap">
+              <i class="fa-solid fa-map-location-dot"></i>&nbsp Bản đồ
+            </button>
+          </li>
+          <li>
+            <button id="btnLibrary" class="btnLibrary">
+              <i class="fa-solid fa-images"></i>&nbsp Thư viện
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div id="subFrame" class="subFrame">
+        <div class="subFrame-content">
+          <span class="close-subFrame"
+            ><i class="fa-solid fa-circle-xmark"></i
+          ></span>
+          <div id="subFrame-title" class="title">
+            <h2 id="subFrame-h2"></h2>
+          </div>
+          <div id="subFrame-para" class="subFrame-para"></div>
+        </div>
+      </div>
+      <div id="modelFrame" class="modelFrame">
+        <span class="close-modelFrame"
+          ><i class="fa-solid fa-circle-xmark"></i
+        ></span>
+        <div class="sketchfab-embed-wrapper"></div>
+      </div>
+      <div id="videoFrame" class="videoFrame">
+        <span class="close-videoFrame"
+          ><i class="fa-solid fa-circle-xmark"></i
+        ></span>
+        <div class="video_intro">
+          <!-- <video id="introVideo" height="446" width="646" controls></video> -->
+          <iframe
+            id="introVideo"
+            height="446"
+            width="646"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+      <div class="header">
+        <img class="filter-top" src="/texture/header.png" alt="filter" />
+        <div id="top-map-container">
+          <div id="local-map"></div>
+        </div>
+      </div>
+      <div id="footer">
+        <img class="filter-bottom" src="/texture/footer.png" alt="filter" />
+        <div id="map-container">
+          <div id="map"></div>
+        </div>
+      </div>
+      <div id="volume" class="volume">
+        <i class="fa-solid fa-volume-off"></i>
+      </div>
+    </div>
+    <audio id="intro_audio" loop></audio>
+    <script>
+      //-------------------------RENDER SQUARE BOTTOM-RIGHT MAP-------------------//
+      const url = new URL(window.location.href);
+      const id = url.pathname.split("/").pop();
+      let map = L.map("map").setView([0, 0], 18);
+      let roundmap = L.map("local-map");
+      var googleIcon = L.icon({
+        iconUrl: "/img/marker/icon-visit.png",
+        iconSize: [40, 40], // size of the icon
+      });
+      var roundIcon = L.icon({
+        iconUrl: "/img/marker/icon-bullet-point.png",
+        iconSize: [20, 20], // size of the icon
+      });
+
+      googleSat = L.tileLayer(
+        "http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
+        {
+          maxZoom: 20,
+          subdomains: ["mt0", "mt1", "mt2", "mt3"],
+        }
+      );
+      googleSat.addTo(map);
+      fetch("/api/view/" + id)
+        .then((response) => response.json())
+        .then((data) => {
+          data.forEach((item) => {
+            const subFrameTitle = document.getElementById("subFrame-h2");
+            const subFrameContent = document.getElementById("subFrame-para");
+            const pElement = document.createElement("p"); // Tạo phần tử <p>
+            const infoVideo = document.getElementById("introVideo");
+
+            infoVideo.src = item.video;
+            // Split the description into paragraphs
+            const paragraphs = item.description.split("\n");
+            // Set the text content of the subFrameTitle element
+            subFrameTitle.textContent = item.view_name;
+            //infoVideo.src = data1.video
+            // Append paragraph elements to the subFrameContent element
+            paragraphs.forEach((paragraph) => {
+              pElement.textContent = paragraph;
+              subFrameContent.appendChild(pElement);
+            });
+            roundmap.setView([item.latitude, item.longitude], 19);
+            fetch("/api/getChildLocation/" + item.parent)
+              .then((response) => response.json())
+              .then((data) => {
+                data.forEach((item) => {
+                  let markerLevel2 = L.marker([item.latitude, item.longitude], {
+                    url: item.link,
+                    icon: roundIcon,
+                  }).addTo(roundmap);
+                  markerLevel2.addEventListener("click", function (e) {
+                    window.location.href = "/view/" + item.link;
+                  });
+                });
+              });
+            //--------------------------------//
+            fetch("/api/getMainInfo/" + item.parent)
+              .then((response) => response.json())
+              .then((data1) => {
+                data1.map((item) => {
+                  map.setView([item.latitude, item.longitude], 18);
+                });
+              });
+          });
+          // add main location into
+          fetch("/api/getAllMainInfo/")
+            .then((response) => response.json())
+            .then((data) => {
+              data.forEach((item) => {
+                let markerLevel1 = L.marker([item.latitude, item.longitude], {
+                  url: item.link,
+                  icon: googleIcon,
+                }).addTo(map);
+                markerLevel1.addEventListener("mouseover", function (e) {
+                  this.bindPopup(item.view_name).openPopup();
+                });
+                markerLevel1.addEventListener("mouseout", function (e) {
+                  this.closePopup();
+                });
+                markerLevel1.addEventListener("click", function (e) {
+                  window.location.href = "/view/" + item.link;
+                });
+              });
+            });
+
+          //CREATE ROUND MAP
+
+          let googleIcon_v2 = L.icon({
+            iconUrl: "/img/marker/marker-admin.gif",
+            iconSize: [25, 30], // size of the icon
+          });
+          googleSat_v2 = L.tileLayer(
+            "http://{s}.google.com/vt?lyrs=s&x={x}&y={y}&z={z}",
+            {
+              maxZoom: 20,
+              subdomains: ["mt0", "mt1", "mt2", "mt3"],
+            }
+          );
+          googleSat_v2.addTo(roundmap);
+        });
+    </script>
+    <script type="module" src="/threejs/class.js?v=1"></script>
+    <script type="module" src="/threejs/audio.js?v=1"></script>
+    <script type="module" src="/threejs/menubar.js?v=1"></script>
+  </body>
+</html>

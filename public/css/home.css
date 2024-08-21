@@ -1,0 +1,189 @@
+* {
+    /* cursor: url('/img/view/cursor/cursor.cur'), auto; */
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0;
+    background-image: url('/img/home/home_background.svg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: url('/img/view/cursor/cursor.cur'), auto;
+
+}
+
+img.filter-top img.filter-bottom {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.filter-top {
+    width: 100vw;
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    z-index: -1;
+}
+
+.filter-bottom {
+    width: 100vw;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: -1;
+}
+
+.triagle {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    display: block;
+}
+
+/* .triagle:hover {
+    cursor: pointer;
+} */
+
+.logo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 60px;
+    width: 60px;
+}
+
+.title h2 {
+    letter-spacing: 2px;
+}
+
+.sub-bar {
+    display: flex;
+    font-family: 'Aldrich', sans-serif;
+    position: fixed;
+    left: 50%;
+    bottom: 4%;
+    transform: translate(-50%, -50%);
+    color: white;
+    padding-bottom: 10px;
+    z-index: 1;
+}
+
+.sub-bar p {
+    margin: 0 15px;
+    letter-spacing: 2px;
+    cursor: pointer;
+}
+
+
+
+.big-title {
+    position: relative;
+    text-align: center;
+    /* Khoảng cách từ viền màn hình */
+    box-sizing: border-box;
+}
+
+.title {
+    font-family: 'Aldrich', sans-serif;
+    position: relative;
+    color: white;
+    z-index: 1;
+    /* margin-top: 10px; */
+    padding-top: 0.5%;
+}
+
+.title {
+    font-family: 'Aldrich', sans-serif;
+    position: relative;
+    color: white;
+    z-index: 1;
+    /* margin-top: 10px; */
+    padding-top: 0.5%;
+}
+
+.navbar {
+    font-family: 'Aldrich', sans-serif;
+    display: flex;
+    /* justify-content: center; */
+    font-size: 15px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    justify-content: space-around;
+}
+
+.btn-navbar {
+    margin: 0 calc(100vw * 0.009);
+    padding: 1px 5px;
+    color: white;
+    border-radius: 2px;
+}
+
+.btn-navbar a {
+    font-family: 'Aldrich', sans-serif;
+    color: white;
+    text-decoration: none;
+}
+
+.btn-navbar:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+
+.btn-subbar {
+    color: white;
+    text-decoration: none;
+}
+
+.btn-subbar:hover {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.5);
+
+}
+
+.side-bar {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    left: 1%;
+    width: fit-content;
+}
+
+.side-bar a {
+    font-family: 'Aldrich', sans-serif;
+}
+
+.side-bar a:hover {
+    cursor: pointer;
+}
+
+.user-link,
+.setting-link {
+    display: flex;
+    /* Hiển thị các phần tử trong hàng ngang */
+    align-items: center;
+    /* Căn giữa theo chiều dọc */
+    text-decoration: none;
+    /* Loại bỏ gạch chân */
+    color: #fff;
+    /* Đặt màu văn bản thành trắng */
+}
+
+/* Tùy chỉnh khoảng cách giữa hình ảnh và văn bản */
+.user-link img,
+.setting-link img {
+    height: 50px;
+    width: 50px;
+
+}

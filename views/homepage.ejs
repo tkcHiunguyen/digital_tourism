@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Aldrich&family=Dosis&family=Geologica&family=Noto+Sans&family=Tektur:wght@500&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="big-title">
+        <div class="title">
+            <h2>
+                UNIVERSAL DIGITAL TWIN PLATFORM
+            </h2>
+        </div>
+        <div class="navbar">
+            <div class="btn-navbar" id="powerlineBtn"><a href="">POWERLINE</a></div>
+            <div class="btn-navbar" id="constructionBtn"><a href="">CONSTRUCTION</a></div>
+            <div class="btn-navbar" id="tourismBtn"><a
+                    href="/view/id=@(106.7540699888154,10.775338274730746)">TOURISM</a></div>
+        </div>
+    </div>
+    </div>
+    <img class="logo" src="/img/logo/white-logo.png" style="display: none;" alt="logo" width="100" height="100">
+    <div class="header">
+        <img class="filter-top" src="/img/home/header.svg" alt="filter">
+    </div>
+
+    <div class="triagle">
+        <img src="/img/home/triagle.svg" alt="triagle" width="300">
+    </div>
+    <div class="side-bar">
+        <div class="user"><a class="user-link"><img src="/img/home/user_icon.svg" alt="user-icon">&nbsp;WELCOME
+                BACK, USER</a></div>
+        <div class="setting"><a class="setting-link"><img src="/img/home/setting_icon.svg"
+                    alt="setting-icon">&nbsp;SETTING</a></div>
+    </div>
+
+    <div class="sub-bar">
+        <p><a class="btn-subbar" id="aboutBtn" href="https://rtrobotics.com/">CONTACT</a></p>
+        <p><a class="btn-subbar" id="aboutBtn" href="https://rtrobotics.com/">ABOUT US</a></p>
+        <p><a class="btn-subbar" id="aboutBtn" href="https://rtrobotics.com/">PRIVACY POLICY</a></p>
+    </div>
+    <div class="footer">
+        <img class="filter-bottom" src="/img/home/footer.svg" alt="filter">
+    </div>
+    <script>
+        function updateSizes() {
+            // Lấy chiều cao của .filter-top
+            const filterTop = document.querySelector(".filter-top");
+            const filterTopHeight = filterTop.clientHeight;
+            const filterTopWidth = filterTop.clientWidth;
+
+            // Set chiều cao của .big-title bằng với chiều cao của .filter-top
+            const bigTitle = document.querySelector(".big-title");
+            bigTitle.style.height = `${filterTopHeight}px`;
+
+            // Đảm bảo .navbar nằm sát dưới đáy của .big-title
+            const navbar = document.querySelector(".navbar");
+            navbar.style.width = `${filterTopWidth / 3}px`;
+        };
+        // Sử dụng sự kiện "load" để thực thi khi trang được tải hoàn toàn
+        window.addEventListener("load", updateSizes);
+
+        // Sử dụng sự kiện "resize" để cập nhật khi kích thước cửa sổ trình duyệt thay đổi
+        window.addEventListener("resize", updateSizes);
+    </script>
+</body>
+
+</html>

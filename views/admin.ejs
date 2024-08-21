@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Trị</title>
+    <link rel="stylesheet" href="/css/admin-sidebar.css" />
+    <link rel="stylesheet" href="/css/admin.css" />
+    <link rel="icon" type="image/png" href="/img/logo/logo.jpg" />
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+      crossorigin=""
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dosis&family=Geologica&family=Noto+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+      integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+      crossorigin=""
+    ></script>
+    <script
+      src="https://kit.fontawesome.com/bf820f96f3.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"
+      integrity="sha384-3gT/vsepWkfz/ff7PpWNUeMzeWoH3cDhm/A8jM7ouoAK0/fP/9bcHHR5kHq2nf+e"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body>
+    <input type="checkbox" id="sidebar-check" />
+    <label for="sidebar-check">
+      <i class="fa-solid fa-bars" id="sidebar-btn"></i>
+      <i class="fa-solid fa-x" id="sidebar-cancel"></i>
+    </label>
+    <div class="sidebar">
+      <header>Thanh điều khiển</header>
+      <ul>
+        <li>
+          <a href="#"><i class="fa-solid fa-info"></i>Thông tin</a>
+        </li>
+        <li>
+          <a href="#"><i class="fas fa-link"></i>Shortcut</a>
+        </li>
+        <li>
+          <a href="#"><i class="fas fa-stream"></i>Overview</a>
+        </li>
+        <li>
+          <a href="#"><i class="fas fa-calendar-days"></i>Event</a>
+        </li>
+        <li>
+          <a href="#"><i class="fas fa-question-circle"></i>About</a>
+        </li>
+        <li>
+          <a href="#"><i class="fas fa-envelope"></i>Contact</a>
+        </li>
+      </ul>
+    </div>
+    <section>
+      <button onclick="addmark()" type="button" class="btn-warning">
+        Thêm điểm
+      </button>
+      <button
+        onclick=" remove()"
+        type="submit"
+        form="addScene"
+        value="submit"
+        class="btn-info"
+      >
+        Lưu
+      </button>
+      <div id="map"></div>
+      <div id="my-modal" class="modal">
+        <form
+          action="/create-scene"
+          enctype="multipart/form-data"
+          method="post"
+          id="addScene"
+        >
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Nhập thông tin cảnh cần thêm</h2>
+            <label for="name">Tên cảnh:</label>
+            <input type="text" id="name" name="name" />
+            <label for="longitude">Kinh độ</label>
+            <input
+              type="number"
+              id="longitude"
+              name="longitude"
+              class="longitude"
+              readonly
+            />
+            <label for="latitude">Vĩ độ</label>
+            <input
+              type="number"
+              id="latitude"
+              name="latitude"
+              class="latitude"
+              readonly
+            />
+            <label for="description">Mô tả</label>
+            <textarea
+              id="description"
+              name="description"
+              rows="4"
+              placeholder="nhập thông tin của địa điểm..."
+            ></textarea>
+            <div class="cols">
+              <div class="select-file">
+                <label for="panaroma_img">Ảnh đính kèm</label>
+                <input type="file" id="panaroma_img" name="panaroma_img" />
+              </div>
+              <div class="select-level">
+                <label for="level">Cấp độ</label>
+                <select id="level" name="level">
+                  <option value="1">Level 1</option>
+                  <option value="2">Level 2</option>
+                  <option value="3">Level 3</option>
+                </select>
+              </div>
+            </div>
+            <button type="button" id="getInfoMarker">Gửi</button>
+          </div>
+        </form>
+      </div>
+    </section>
+    <div class="pointer"></div>
+    <script type="text/javascript">
+      let dulieu
+      fetch('/api/home')
+          .then(response => response.json())
+          .then(data => {
+              // xử lý data
+          })
+          .catch(error => console.error(error));
+      const longitude = document.getElementById("longitude");
+      const latitude = document.getElementById("latitude");
+      const name = document.getElementById("name");
+      const description = document.getElementById("description");
+      const point = document.querySelector('.pointer')
+      const btnAddmark = document.querySelector('.btn-warning');
+      // Lấy đối tượng modal
+      const modal = document.getElementById("my-modal");
+      // Lấy nút mở modal
+      const btnOpen = document.getElementById("open-modal");
+      // Lấy phần tử <span> đóng modal
+      const spanClose = document.getElementsByClassName("close")[0];
+      // Khi người dùng nhấn vào nút đóng modal (x), đóng modal
+      spanClose.onclick = function () {
+          modal.style.display = "none";
+      }
+      // Khi người dùng nhấn nút ngoài modal, đóng modal
+      window.onclick = function (event) {
+          if (event.target == modal) {
+              modal.style.display = "none";
+          }
+      }
+      // Lấy đối tượng nút Gửi
+      const btnSubmit = document.getElementById("getInfoMarker");
+      // Khi người dùng nhấn nút Gửi, lấy giá trị nhập vào và in ra console
+      btnSubmit.onclick = function () {
+          modal.style.display = "none";
+          console.log("Tên: " + name.value);
+          console.log("Mô tả: " + description.value);
+          console.log('vĩ độ: ' + latitude.value);
+          console.log('kinh độ :' + longitude.value);
+      }
+      let map = L.map('map').setView([10.775485552027122, 106.71116699891252], 13);
+
+      const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      })
+
+      googleStreets = L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}', {
+          maxZoom: 20,
+          subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+      });
+
+      googleHybrid = L.tileLayer('http://{s}.google.com/vt?lyrs=s,h&x={x}&y={y}&z={z}', {
+          maxZoom: 20,
+          subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+      });
+
+      googleSat = L.tileLayer('http://{s}.google.com/vt?lyrs=s&x={x}&y={y}&z={z}', {
+          maxZoom: 20,
+          subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+      });
+
+      googleTerrain = L.tileLayer('http://{s}.google.com/vt?lyrs=p&x={x}&y={y}&z={z}', {
+          maxZoom: 20,
+          subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+      });
+      googleTerrain.addTo(map)
+      var baseMap = {
+          'Leaflet Map': tiles,
+          'Google Street Map': googleStreets,
+          'Google Street1 Map': googleHybrid,
+          'Vệ Tinh': googleSat,
+          'Terrant': googleTerrain
+      }
+      var controlToggle = L.control.layers(baseMap).addTo(map);
+
+      var layerGroup = L.layerGroup().addTo(map);
+      var googleIcon = L.icon({
+          iconUrl: '/img/marker/marker-admin.gif',
+          iconSize: [35, 42], // size of the icon
+      });
+      <% data.forEach(function (location) { %>
+          var marker = L.marker([<%= location.latitude %>, <%= location.longitude %>], { url: "<%=location.link%>", icon: googleIcon }).addTo(map);
+          marker.on('mouseover', function (e) {
+              point.classList.add('is-active');
+              var mouseX = e.originalEvent.clientX;
+              var mouseY = e.originalEvent.clientY;
+              var width = point.clientWidth;
+
+              point.style.top = mouseY + 1 + 'px';
+              point.style.left = mouseX + 'px';
+              point.innerHTML = "<img class='lazyload blur-up' width=250px data-src='<%=location.image%>' alt='<%=location.view_name%>'>";
+
+              //console.log(mouseX + ' + ' + mouseY);
+              this.bindPopup("<%= location.view_name %><br>").openPopup();
+          });
+          marker.on('mouseout', function (e) {
+              this.closePopup();
+              point.classList.remove('is-active');
+          });
+          marker.on('click', function (e) {
+              window.location.href = '/view/' + this.options.url;
+              point.classList.remove('is-active')
+          });
+              <% }) %>;
+      let isMarkAdjust = false;
+      let myMap = map;
+      var a = 0;
+      var lng1;
+      var lat1;
+      function addmark() {
+          a++;
+          if (a === 1) {
+              if (!isMarkAdjust) {
+                  btnAddmark.innerHTML = "Hủy";
+                  let marker;
+                  myMap.on('click', function (e) {
+                      let lat = e.latlng.lat;
+                      let lng = e.latlng.lng;
+                      longitude.value = lng;
+                      latitude.value = lat;
+                      lng1 = lng;
+                      lat1 = lat;
+                      if (marker) {
+                          layerGroup.removeLayer(marker); // xóa marker cũ trước khi thêm marker mới
+                      }
+                      marker = L.marker([lat, lng]).addTo(layerGroup);
+                      modal.style.display = 'block';
+                  });
+                  mapE = document.querySelector('#map');
+                  mapE.classList.add("adjust");
+                  isMarkAdjust = true;
+              }
+          }
+          else if (a === 2) {
+              btnAddmark.innerHTML = "Thêm điểm";
+              remove();
+              a = 0;
+          }
+      }
+      function remove() {
+          if (isMarkAdjust) {
+              let layers = layerGroup.getLayers();
+              layerGroup.eachLayer(function (layer) {
+                  if (layer instanceof L.Marker && layer.getLatLng().equals([lat1, lng1])) {
+                      myMap.removeLayer(layer);
+                  }
+              });
+              myMap.off('click');
+              mapE = document.querySelector('#map');
+              mapE.classList.remove("adjust");
+              isMarkAdjust = false;
+          }
+      }
+      fetch('/api/home')
+          .then(response => response.json())
+          .then(data => {
+              console.log(data[1].link);
+              let listView = data;
+              listView.map(function (listView) {
+                  console.log(listView.link);
+              })
+          })
+    </script>
+  </body>
+</html>
